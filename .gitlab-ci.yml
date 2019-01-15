@@ -1,0 +1,72 @@
+stages:
+  - lint
+  - build
+
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+  LANGUAGE: "en_US.UTF-8"
+  FL_SLACK_CHANNEL: "##jsonplaceholder"
+
+before_script:
+  - unlock_keychain
+  - gem install bundler
+  - bundle install
+  - bundle update
+
+lint:
+  stage: lint
+  tags:
+    - ios  
+  script:
+    - bundle exec fastlane lint
+  only:
+    - branches
+  except:
+    - tags
+  artifacts:
+    paths:
+      - fastlane/swiftlint.html
+  allow_failure: false
+
+build:dev:
+  dependencies: []
+  stage: build
+  artifacts:
+    paths:
+      - fastlane/screenshots
+      - fastlane/logs
+  script:
+    - bundle exec fastlane build --env dev
+  tags:
+    - ios
+  only:
+     - master
+
+build:stage:
+  dependencies: []
+  stage: build
+  artifacts:
+    paths:
+      - fastlane/screenshots
+      - fastlane/logs
+  script:
+    - bundle exec fastlane build --env stage
+  tags:
+    - ios
+  only:
+     - stage
+
+build:production:
+  dependencies: []
+  stage: build
+  artifacts:
+    paths:
+      - fastlane/screenshots
+      - fastlane/logs
+  script:
+    - bundle exec fastlane build --env production
+  tags:
+    - ios
+  only:
+     - production

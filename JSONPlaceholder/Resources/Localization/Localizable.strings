@@ -1,0 +1,54 @@
+/*
+ * 1. Group lines to sections
+ *
+ * 2. Section name format:
+ *      // ======
+ *      // 'MARK: - Section Name
+ *      // ======
+ *
+ * 3. Separate subsections using additional newline and MARK
+ *
+ * 4. Lines format:
+ *      /*  *'/ - comment about string
+ *      "Key" = "Value";
+ *
+ *      Optional: 'Key' should contain name of screen, type of component, identifier
+ *
+ * 5. Parameters in strings should be named using format:
+ *      $(ParameterNameKey) - it will be automatically replaced with value from passed dict while localization
+ *
+ * 6. Localize plural numbers in Localizable.stringsdict
+ *      How to use plural localization - https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPInternational/StringsdictFileFormat/StringsdictFileFormat.html
+ *      Plural rules - http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html
+ */
+
+
+// ======
+// MARK: - Common
+// ======
+
+
+
+// ======
+// MARK: - Enums
+// ======
+
+
+
+// ======
+// MARK: - Errors
+// ======
+
+
+
+// ======
+// MARK: - Alerts
+// ======
+
+
+
+// ======
+// MARK: - Screens
+// ======
+
+

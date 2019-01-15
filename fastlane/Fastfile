@@ -1,0 +1,141 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Get actual store profile"
+  lane :profile_appstore_get do
+    match_wrapper("appstore", false)
+  end
+
+  desc "Force update profiles"
+  lane :profiles_update do
+    match_wrapper("development", true)
+    match_wrapper("appstore", true)
+  end
+
+  def match_wrapper(type, force)
+    match(
+      git_branch: ENV['CS_BRANCH'],
+      app_identifier: ENV['TG_BUNDLE'],
+      team_id: ENV['TEAM_ID_APPLE'],
+      type: type,
+      force: force,
+      keychain_name: "login.keychain",
+      keychain_password: ENV['MATCH_PASSWORD']
+    )
+  end
+
+  desc "Generate push certs"
+  lane :push_cert_generate do
+    get_push_certificate(
+      generate_p12: true,
+      app_identifier: ENV['TG_BUNDLE'],
+      team_id: ENV['TEAM_ID_APPLE']
+    )
+  end
+
+  desc "Get latest build version from TestFlight"
+  lane :build_version_last do
+    latest_testflight_build_number(
+      version: get_version_number
+    )
+  end
+
+  desc "Check Swift Syntax"
+  lane :lint do
+    swiftlint(
+      reporter: "html",
+      output_file: "fastlane/swiftlint.html",
+      ignore_exit_status: true
+    )
+  end
+
+  desc "Refresh DSYMs"
+  lane :dsym_upload_all do
+    download_dsyms(
+      app_identifier: ENV['TG_BUNDLE'],
+      team_id: ENV['TEAM_ID_ITC']
+    )
+    upload_symbols_to_crashlytics
+    clean_build_artifacts
+  end
+
+  desc "Refresh DSYM from last build"
+  lane :dsym_upload_last do
+    download_dsyms(
+      app_identifier: ENV['TG_BUNDLE'],
+      team_id: ENV['TEAM_ID_ITC'],
+      build_number: build_version_last.to_s
+    )
+    upload_symbols_to_crashlytics
+    clean_build_artifacts
+  end
+
+  desc "Push a new build to TestFlight"
+  lane :build do
+    begin
+      cocoapods(
+        try_repo_update_on_error: true
+      )
+      profile_appstore_get
+      increment_build_number(
+        build_number: build_version_last + 1
+      )
+      output_directory = "build"
+      ipa_name = "Build.ipa"
+      build_app(
+        workspace: "JSONPlaceholder.xcworkspace",
+        configuration: ENV['TG_CONFIGURATION'],
+        scheme: ENV['TG_SCHEME'],
+        output_directory: output_directory,
+        output_name: ipa_name
+      )
+      upload_to_testflight(
+        app_identifier: ENV['TG_BUNDLE'],
+        team_id: ENV['TEAM_ID_ITC'],
+        ipa: output_directory + "/" + ipa_name,
+        skip_waiting_for_build_processing: true
+      )
+
+      # dsym_upload_last
+
+      slack(
+        message: "iOS version #{get_version_number} build #{get_build_number} #{ENV['TG_TYPE']} submitted to TestFlight. \n",
+      )
+    rescue => exception
+      on_error(exception)
+    end
+  end
+
+  def on_error(exception)
+    slack(
+         message: "Error occured!",
+         success: false,
+         attachment_properties: {
+             fields: [
+                 {
+                     title: "Error message",
+                     value: exception
+                 }
+             ]
+         }
+     )
+    raise exception
+  end
+
+end

@@ -1,0 +1,6 @@
+git_url("git@git.steelkiwi.com:ios/certificates.git")
+git_branch ENV['CS_BRANCH']
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier ENV['TG_BUNDLE']
