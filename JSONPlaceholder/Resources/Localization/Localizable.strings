@@ -27,6 +27,8 @@
 // MARK: - Common
 // ======
 
+"OK"            = "OK";
+"Error"         = "Error";
 
 
 // ======
@@ -39,6 +41,23 @@
 // MARK: - Errors
 // ======
 
+/* Error, when something wrong with request parameters */
+"Error.WrongRequest" = "Invalid request data";
+
+/* Universal error, when something happens with request */
+"Error.FailedGetServerResponse" = "Couldn't retrieve server response.";
+
+/* Error, when couldn't convert retrieved data into required format */
+"Error.ParsingError" = "Could not parse data.";
+
+/* Error, when field has wrong value */
+"Error.Field.WrongValue" = "Invalid value";
+
+/* Error, when entered non-positive value */
+"Error.Range.NonPositive" = "Value should be 1 or bigger";
+
+/* Error, when lower value is bigger, than upper */
+"Error.Range.LowerBiggerThanUpper" = "Upper value should be bigger or equal lower";
 
 
 // ======
@@ -52,3 +71,31 @@
 // ======
 
 
+// MARK: - Select Bounds screen
+
+/* Text for lower comment id bound */
+"Bounds.Lower.Description" = "Lower id bound";
+
+/* Text for upper comment id bound */
+"Bounds.Upper.Description" = "Upper id bound";
+
+/* Send request button title */
+"Bounds.Request.Send" = "Request";
+
+/* Cancel request button title */
+"Bounds.Request.Cancel" = "Cancel";
+
+
+// MARK: - Comments List screen
+
+/* Comment id description label */
+"CommentsList.Comment.Id" = "ID:";
+
+/* Post id description label */
+"CommentsList.Comment.PostId" = "Post ID:";
+
+/* Comment name description label */
+"CommentsList.Comment.Name" = "Name:";
+
+/* Sender email description label */
+"CommentsList.Comment.Email" = "Email:";

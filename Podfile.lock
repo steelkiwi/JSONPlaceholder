@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (4.8.0)
+  - PKHUD (5.2.0)
+  - SKExtensions (1.0.9)
+  - SKLocalizable (1.0.3)
+
+DEPENDENCIES:
+  - Alamofire
+  - PKHUD
+  - SKExtensions (from `https://github.com/steelkiwi/SKExtensions.git`)
+  - SKLocalizable (from `https://github.com/steelkiwi/SKLocalizable.git`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - PKHUD
+
+EXTERNAL SOURCES:
+  SKExtensions:
+    :git: https://github.com/steelkiwi/SKExtensions.git
+  SKLocalizable:
+    :git: https://github.com/steelkiwi/SKLocalizable.git
+
+CHECKOUT OPTIONS:
+  SKExtensions:
+    :commit: 096c6b86b2f91d1c742e2f31d9f221e3539f892c
+    :git: https://github.com/steelkiwi/SKExtensions.git
+  SKLocalizable:
+    :commit: df1a92c08956539891b965240d70924f13f1d3d1
+    :git: https://github.com/steelkiwi/SKLocalizable.git
+
+SPEC CHECKSUMS:
+  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  PKHUD: dd5357ac65f26115c35c4a68e9b328053326c5fe
+  SKExtensions: 716030698b120dc257e64143ee9f330543890f68
+  SKLocalizable: 34ad53abbfcd90b649bbfad69ac044c31b28bd59
+
+PODFILE CHECKSUM: 9eb9f4c22a2129da45f70c353385c72e059cacda
+
+COCOAPODS: 1.5.3

@@ -5,13 +5,14 @@ target 'JSONPlaceholder' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for JSONPlaceholder
-
+  # Network
+  pod 'Alamofire'
+  
+  # UI
+  pod 'PKHUD'
+  pod 'SKLocalizable', :git => "https://github.com/steelkiwi/SKLocalizable.git"
+  
+  # Helpers
   pod 'SKExtensions', :git => "https://github.com/steelkiwi/SKExtensions.git"
-
-  target 'JSONPlaceholderTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
 end
