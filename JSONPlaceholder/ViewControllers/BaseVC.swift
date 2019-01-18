@@ -94,20 +94,49 @@ class BaseVC: UIViewController {
 
     // MARK: - Loader
     
-    func loaderShow(view: UIView? = nil) {
-        HUD.show(.progress, onView: view ?? self.view)
+    private var cancelAction: Block?
+    
+    func loaderShow(cancelAction: Block? = nil) {
+        let loaderView = UIView.init(frame: CGRect.init(origin: .zero, size: .init(width: 140, height: 150)))
+        loaderView.backgroundColor = UIColor.darkGray.withAlphaComponent(0.7)
+        loaderView.cornerRadius = 8
+        
+        let loader = UIActivityIndicatorView.init()
+        loader.style = .whiteLarge
+        loader.startAnimating()
+        
+        let cancelButton = UIButton.init()
+        cancelButton.setTitle("Cancel".localized(), for: .normal)
+        cancelButton.borderWidth = 1
+        cancelButton.borderColor = .white
+        cancelButton.cornerRadius = 4
+        cancelButton.addTarget(self, action: #selector(loaderCancel), for: .touchUpInside)
+        cancelButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        let stack = UIStackView.init(arrangedSubviews: [loader, cancelButton])
+        stack.axis = .vertical
+        
+        loaderView.addSubviewWithConstraints(stack, top: 0, left: 16, bottom: 16, right: 16)
+        
+        self.cancelAction = cancelAction
+        
+        PKHUD.sharedHUD.contentView = loaderView
+        PKHUD.sharedHUD.show()
     }
     
     func loaderHide() {
+        cancelAction = nil
+        
         pullToRefresh?.endRefreshing()
         
-        HUD.hide()
+        PKHUD.sharedHUD.hide()
     }
     
-    // MARK: - Network request
-    
-    /// Save currently performed request. Can be cancelled in any moment. Should be resetted after response received
-    var currentRequest: Request?
+    @objc
+    private func loaderCancel() {
+        cancelAction?()
+        cancelAction = nil
+    }
         
     // MARK: - Pull-to-refresh
     

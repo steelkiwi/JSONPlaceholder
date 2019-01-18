@@ -17,6 +17,8 @@ let kUrlBase = "https://jsonplaceholder.typicode.com/"
 typealias JSON          = Dictionary<String, Any>
 typealias ErrorsDict    = Dictionary<String, Error> // For errors from server response
 
+typealias Block = () -> Void
+
 typealias ResponseObjectBlock<T: Any> = (_ value: T?, _ error: ErrorsDict?) -> Void
 
 // MARK: - Wrappers

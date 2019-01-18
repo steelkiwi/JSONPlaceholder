@@ -73,11 +73,8 @@ class SelectBoundsVC: BaseVC, StoryboardInstatiatable {
         
         let range = (lowerRangeValue - 1)...upperRangeValue // id starts with '1', but index with '0'
         
-        self.loaderShow()
-        self.currentRequest = commentsService.commentsGet(idRange: range) { (comments, errors) in
+        let request = commentsService.commentsGet(idRange: range) { (comments, errors) in
             self.loaderHide()
-            
-            self.currentRequest = nil
             
             guard let comments = comments else {
                 let errors = errors ?? ErrorsDict.init(error: NetworkError.serverError)
@@ -89,6 +86,10 @@ class SelectBoundsVC: BaseVC, StoryboardInstatiatable {
             commentsVC.config(comments: comments, idRange: range)
             
             self.navigationController?.pushViewController(commentsVC, animated: true)
+        }
+        self.loaderShow {
+            request.cancel()
+            self.loaderHide()
         }
     }
 }

@@ -50,11 +50,8 @@ class CommentListVC: BaseVC, StoryboardInstatiatable {
         
         let range = lastCommentId...idRange.upperBound
         
-        self.loaderShow()
-        self.currentRequest = commentsService.commentsGet(idRange: range) { (comments, errors) in
+        let request = commentsService.commentsGet(idRange: range) { (comments, errors) in
             self.loaderHide()
-            
-            self.currentRequest = nil
             
             guard let comments = comments else {
                 let errors = errors ?? ErrorsDict.init(error: NetworkError.serverError)
@@ -66,6 +63,10 @@ class CommentListVC: BaseVC, StoryboardInstatiatable {
             
             self.comments.append(contentsOf: comments)
             self.tableView.reloadData()
+        }
+        self.loaderShow {
+            request.cancel()
+            self.loaderHide()
         }
     }
 }
